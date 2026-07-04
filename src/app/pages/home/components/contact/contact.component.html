@@ -1,0 +1,100 @@
+<section class="testimonials-section" aria-labelledby="testimonials-title">
+  <div class="container">
+    <h2 id="testimonials-title" class="section-title">Nossos Clientes</h2>
+    
+    <div class="clients-background">
+      <div class="testimonials-grid">
+        @for (item of testimonials(); track item.name) {
+          <div class="testimonial-card">
+            <div class="stars" aria-label="Avaliação 5 de 5 estrelas">
+              @for (s of [1,2,3,4,5]; track s) {
+                <span>
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="#f1c40f" aria-hidden="true">
+                    <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
+                  </svg>
+                </span>
+              }
+            </div>
+            
+            <p class="testimonial-text">"{{ item.text }}"</p>
+            
+            <div class="testimonial-footer">
+              <span class="author-name">{{ item.name }}</span>
+              <img [ngSrc]="item.photo" width="60" height="60" [alt]="'Foto de ' + item.name" class="author-photo">
+            </div>
+          </div>
+        }
+      </div>
+
+      <div class="nav-arrows">
+        <button type="button" class="arrow" aria-label="Depoimento anterior">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><polyline points="15 18 9 12 15 6"></polyline></svg>
+        </button>
+        <button type="button" class="arrow" aria-label="Próximo depoimento">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><polyline points="9 18 15 12 9 6"></polyline></svg>
+        </button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="contato" class="contact-section" aria-labelledby="contact-title">
+  <div class="container contact-grid">
+    
+    <div class="contact-form-side card-glass-contact">
+      <p class="form-lead">Precisando de ajuda?</p>
+      <h2 id="contact-title" class="form-title">Fale Conosco</h2>
+      
+      <form [formGroup]="contactForm" (ngSubmit)="onSubmit()">
+        <div class="form-group">
+          <label for="name">Nome</label>
+          <input id="name" type="text" formControlName="name" placeholder="ex: Maria Silva…" autocomplete="name">
+          @if (contactForm.controls.name.invalid && contactForm.controls.name.touched) {
+            <span class="field-error">Por favor, preencha o seu nome.</span>
+          }
+        </div>
+        
+        <div class="form-group">
+          <label for="email">Email</label>
+          <input id="email" type="email" formControlName="email" placeholder="ex: mariasilva@gmail.com…" autocomplete="email" spellcheck="false">
+          @if (contactForm.controls.email.invalid && contactForm.controls.email.touched) {
+            <span class="field-error">Digite um endereço de email válido.</span>
+          }
+        </div>
+
+        <div class="form-group">
+          <label for="phone">Telefone</label>
+          <input id="phone" type="tel" formControlName="phone" placeholder="ex: (11) 98765-4321…" autocomplete="tel">
+        </div>
+        
+        <div class="form-group">
+          <label for="message">Mensagem</label>
+          <textarea id="message" formControlName="message" rows="4" placeholder="Escreva como podemos ajudar na sua jornada de bem-estar…"></textarea>
+          @if (contactForm.controls.message.invalid && contactForm.controls.message.touched) {
+            <span class="field-error">Por favor, digite sua mensagem.</span>
+          }
+        </div>
+        
+        <button type="submit" class="btn-submit" [disabled]="contactForm.invalid">Enviar Mensagem</button>
+      </form>
+    </div>
+
+    <div class="contact-image-side">
+      <img ngSrc="assets/images/Mulher rosa yoga.png" width="560" height="660" alt="Praticante realizando postura de alongamento no estúdio" class="side-img">
+    </div>
+  </div>
+</section>
+
+<footer class="footer-section">
+  <div class="container footer-container">
+    <div class="footer-logo">
+      <img ngSrc="assets/icons/Logo Taíse.png" width="56" height="56" alt="Logo Taíse Yoga" class="logo-icon white-logo">
+      <span class="footer-logo-text">TAÍSE YOGA</span>
+    </div>
+    
+    <div class="footer-info">
+      <p class="footer-phone">TELEFONE / WHATSAPP: (73) 99172-7744</p>
+      <p class="footer-copy">&copy; 2026 Taíse Yoga. Todos os direitos reservados.</p>
+    </div>
+  </div>
+</footer>

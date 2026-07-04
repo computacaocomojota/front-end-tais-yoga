@@ -1,0 +1,7 @@
+# Configuração de Roteamento para Cloudflare Pages (SPA / Single Page Application)
+# Se você quiser que o Cloudflare Pages faça proxy reverso das requisições de API para seu back-end Spring Boot,
+# descomente a linha abaixo e substitua pela URL do seu servidor em produção (ex: no Railway/Render):
+# /api/* https://sua-api-springboot.onrender.com/api/:splat 200
+
+# Redirecionamento SPA: garante que rotas como /login ou /agendamentos funcionem após refresh
+/* /index.html 200

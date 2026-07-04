@@ -1,0 +1,156 @@
+<div class="login-wrapper">
+  <button (click)="voltarEtapa()" class="btn-back" aria-label="Voltar para etapa anterior">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+      <line x1="19" y1="12" x2="5" y2="12"></line>
+      <polyline points="12 19 5 12 12 5"></polyline>
+    </svg>
+    Voltar
+  </button>
+
+  <div class="glass-card">
+    @if (step() === 'email') {
+      <div class="step-content">
+        <h1 class="login-title">ESQUECEU A SENHA?</h1>
+        <p class="login-subtitle">Digite o endereço de e-mail associado à sua conta e enviaremos um link para redefinir sua senha.</p>
+
+        <form [formGroup]="emailForm" (ngSubmit)="onSubmitEmail()" class="login-form">
+          <div class="input-group">
+            <input id="recuperar-email" type="email" formControlName="email" placeholder="Email" class="glass-input" aria-label="E-mail" autocomplete="email" spellcheck="false">
+            @if (emailForm.get('email')?.invalid && (emailForm.get('email')?.touched || emailForm.get('email')?.dirty)) {
+              <div class="error-message" role="alert" aria-live="polite">
+                @if (emailForm.get('email')?.hasError('required')) {
+                  <small>O e-mail é obrigatório.</small>
+                }
+                @if (emailForm.get('email')?.hasError('email')) {
+                  <small>Insira um formato de e-mail válido.</small>
+                }
+              </div>
+            }
+          </div>
+
+          @if (authService.erro()) {
+            <div class="error-message server-error" role="alert" aria-live="polite">
+              <small>{{ authService.erro() }}</small>
+            </div>
+          }
+
+          <button type="submit" class="btn-continuar" [disabled]="emailForm.invalid || authService.loading()">
+            {{ authService.loading() ? 'Enviando...' : 'Enviar Código' }}
+          </button>
+        </form>
+      </div>
+    }
+
+    @if (step() === 'codigo') {
+      <div class="step-content">
+        <div class="step-icon" aria-hidden="true">
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
+            <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+            <polyline points="22,6 12,13 2,6"></polyline>
+          </svg>
+        </div>
+
+        <h1 class="login-title">CÓDIGO DE VERIFICAÇÃO</h1>
+        <p class="login-subtitle">Digite o código de 4 dígitos enviado para <strong>{{ userEmail() }}</strong>.</p>
+
+        <div class="otp-container" (paste)="onPaste($event)">
+          @for (digit of codeDigits(); track $index) {
+            <input
+              [id]="'code-' + $index"
+              type="text"
+              inputmode="numeric"
+              maxlength="1"
+              [value]="digit"
+              (input)="onDigitInput($event, $index)"
+              (keydown)="onDigitKeydown($event, $index)"
+              class="otp-input"
+              [class.active]="!!digit"
+              [attr.aria-label]="'Dígito ' + ($index + 1)"
+              autocomplete="one-time-code"
+            >
+          }
+        </div>
+
+        <p class="resend-text">
+          Não recebeu o código?
+          <span class="resend-link" role="button" tabindex="0" (click)="reenviarCodigo()" (keydown.enter)="reenviarCodigo()" (keydown.space)="reenviarCodigo()">Reenviar</span>
+        </p>
+
+        @if (authService.erro()) {
+          <div class="error-message server-error" role="alert" aria-live="polite">
+            <small>{{ authService.erro() }}</small>
+          </div>
+        }
+
+        <button type="button" (click)="onSubmitCodigo()" class="btn-continuar" [disabled]="codeDigits().join('').length < 4 || authService.loading()">
+          {{ authService.loading() ? 'Verificando...' : 'Verificar' }}
+        </button>
+      </div>
+    }
+
+    @if (step() === 'redefinir') {
+      <div class="step-content">
+        <h1 class="login-title">REDEFINIR SENHA</h1>
+        <p class="login-subtitle">Crie uma nova senha segura para sua conta.</p>
+
+        <form [formGroup]="senhaForm" (ngSubmit)="onSubmitSenha()" class="login-form">
+          <div class="input-group">
+            <input id="nova-senha-1" [type]="showPassword() ? 'text' : 'password'" formControlName="senha" placeholder="Senha" class="glass-input" aria-label="Senha" autocomplete="new-password">
+            <span class="icon-eye" (click)="togglePasswordVisibility()" role="button" [attr.aria-label]="showPassword() ? 'Ocultar senha' : 'Exibir senha'" tabindex="0" (keydown.enter)="togglePasswordVisibility()" (keydown.space)="togglePasswordVisibility()">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#777" stroke-width="2"><path d="M1 12s4-8 11-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+            </span>
+            @if (senhaForm.get('senha')?.invalid && (senhaForm.get('senha')?.touched || senhaForm.get('senha')?.dirty)) {
+              <div class="error-message" role="alert" aria-live="polite">
+                @if (senhaForm.get('senha')?.hasError('required')) {
+                  <small>A senha é obrigatória.</small>
+                }
+                @if (senhaForm.get('senha')?.hasError('minlength')) {
+                  <small>A senha deve ter no mínimo 6 caracteres.</small>
+                }
+              </div>
+            }
+          </div>
+
+          <div class="input-group">
+            <input id="nova-senha-2" [type]="showNewPassword() ? 'text' : 'password'" formControlName="novaSenha" placeholder="Nova Senha" class="glass-input" aria-label="Confirmação da Nova Senha" autocomplete="new-password">
+            <span class="icon-eye" (click)="toggleNewPasswordVisibility()" role="button" [attr.aria-label]="showNewPassword() ? 'Ocultar confirmação' : 'Exibir confirmação'" tabindex="0" (keydown.enter)="toggleNewPasswordVisibility()" (keydown.space)="toggleNewPasswordVisibility()">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#777" stroke-width="2"><path d="M1 12s4-8 11-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+            </span>
+            @if (senhaForm.hasError('senhasNaoCoincidem') && (senhaForm.get('novaSenha')?.touched || senhaForm.get('novaSenha')?.dirty)) {
+              <div class="error-message" role="alert" aria-live="polite">
+                <small>As senhas digitadas não coincidem.</small>
+              </div>
+            }
+          </div>
+
+          @if (authService.erro()) {
+            <div class="error-message server-error" role="alert" aria-live="polite">
+              <small>{{ authService.erro() }}</small>
+            </div>
+          }
+
+          <button type="submit" class="btn-continuar" [disabled]="senhaForm.invalid || authService.loading()">
+            {{ authService.loading() ? 'Salvando...' : 'Continuar' }}
+          </button>
+        </form>
+      </div>
+    }
+  </div>
+
+  @if (showSuccessModal()) {
+    <div class="modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="sucesso-modal-title">
+      <div class="modal-card">
+        <div class="modal-icon" aria-hidden="true">
+          <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#547c6a" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="20 6 9 17 4 12"></polyline>
+          </svg>
+        </div>
+        <h2 id="sucesso-modal-title" class="modal-title">Senha Redefinida!</h2>
+        <p class="modal-text">Sua senha foi atualizada com sucesso. Agora você já pode fazer login na sua conta.</p>
+        <button type="button" class="btn-modal-action" (click)="irParaLogin()">
+          Voltar para Login
+        </button>
+      </div>
+    </div>
+  }
+</div>

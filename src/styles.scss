@@ -1,0 +1,102 @@
+/* src/styles.scss */
+
+html {
+  scroll-behavior: smooth;
+}
+
+section {
+  scroll-margin-top: 90px;
+}
+
+// 1. Definição da Paleta de Cores do Figma e Tokens de Design
+:root {
+  --color-primary-green: #547c6a; // Verde escuro dos botões/textos
+  --color-primary-hover: #436354;
+  --color-background-light: #fafafa; // Bege muito claro de fundo
+  --color-accent-gold: #a47e4f; // Dourado da Mandala e Estrelas
+  --color-text-dark: #333333; // Texto geral
+  --color-text-light: #707070; // Subtítulos e descrições
+  --color-white: #ffffff;
+  --color-focus-ring: #a47e4f;
+}
+
+// Acessibilidade: Indicador de Foco Visível (Web Interface Guidelines)
+:focus-visible {
+  outline: 3px solid var(--color-focus-ring);
+  outline-offset: 3px;
+}
+
+// 2. Tipografia
+body {
+  font-family: 'Open Sans', sans-serif;
+  background-color: var(--color-background-light);
+  color: var(--color-text-dark);
+  margin: 0;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3, .logo-text {
+  font-family: 'Cormorant Garamond', 'Playfair Display', serif;
+  color: var(--color-primary-green);
+  font-weight: 700;
+  text-wrap: balance; // Evita viúvas e melhora harmonia visual
+}
+
+// 3. Utilitários Globais
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+.btn-primary {
+  background-color: var(--color-primary-green);
+  color: var(--color-white);
+  border: none;
+  padding: 14px 28px;
+  border-radius: 50px;
+  font-family: 'Open Sans', sans-serif;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+
+  &:hover {
+    background-color: var(--color-primary-hover);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(84, 124, 106, 0.25);
+  }
+
+  &:active {
+    transform: translateY(0);
+  }
+}
+
+.btn-secondary {
+  background-color: var(--color-white);
+  color: var(--color-primary-green);
+  border: 2px solid var(--color-primary-green);
+  padding: 12px 26px;
+  border-radius: 50px;
+  font-family: 'Open Sans', sans-serif;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease, color 0.3s ease, transform 0.2s ease;
+
+  &:hover {
+    background-color: var(--color-primary-green);
+    color: var(--color-white);
+    transform: translateY(-2px);
+  }
+}
+
+// Acessibilidade: Respeito a prefers-reduced-motion (Web Interface Guidelines)
+@media (prefers-reduced-motion: reduce) {
+  *, ::before, ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

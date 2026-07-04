@@ -1,0 +1,94 @@
+.agendamento-header {
+  width: 100%;
+  padding: 16px 0;
+  background-color: #fafafa;
+  border-bottom: 1px solid rgba(84, 124, 106, 0.15);
+}
+
+.header-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
+  text-decoration: none;
+  transition: opacity 0.2s ease;
+
+  &:hover {
+    opacity: 0.85;
+  }
+}
+
+.logo-icon {
+  width: 64px;
+  height: auto;
+}
+
+.logo-text {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.4rem;
+  color: #547c6a;
+  letter-spacing: 2.5px;
+  font-weight: 400;
+}
+
+.user-nav {
+  display: flex;
+  align-items: center;
+}
+
+.btn-logout {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 20px;
+  border-radius: 30px;
+  border: 1px solid #547c6a;
+  background-color: transparent;
+  color: #547c6a;
+  font-family: 'Open Sans', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.25s ease;
+
+  &:hover {
+    background-color: #547c6a;
+    color: #ffffff;
+    box-shadow: 0 4px 12px rgba(84, 124, 106, 0.2);
+    transform: translateY(-1px);
+  }
+
+  &:focus-visible {
+    outline: 2px solid #547c6a;
+    outline-offset: 2px;
+  }
+}
+
+@media (max-width: 600px) {
+  .header-container {
+    padding: 0 16px;
+  }
+
+  .logo-icon {
+    width: 50px;
+  }
+
+  .logo-text {
+    font-size: 1.15rem;
+    letter-spacing: 1.5px;
+  }
+
+  .btn-logout {
+    padding: 6px 14px;
+    font-size: 0.85rem;
+  }
+}

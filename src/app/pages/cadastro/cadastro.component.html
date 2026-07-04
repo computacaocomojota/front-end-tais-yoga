@@ -1,0 +1,108 @@
+<div class="login-wrapper">
+  <a routerLink="/" class="btn-back" aria-label="Voltar para página inicial">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+      <line x1="19" y1="12" x2="5" y2="12"></line>
+      <polyline points="12 19 5 12 12 5"></polyline>
+    </svg>
+    Voltar
+  </a>
+
+  <div class="glass-card">
+    <div class="toggle-container">
+      <div class="toggle-bg">
+        <a class="toggle-btn" routerLink="/login">Login</a>
+        <span class="toggle-btn active" role="button" aria-current="page">Cadastro</span>
+      </div>
+    </div>
+
+    <h1 class="login-title">COMECE SUA JORNADA</h1>
+    <p class="login-subtitle">Crie sua conta no Espaço Taíse Yoga.</p>
+
+    <form [formGroup]="cadastroForm" (ngSubmit)="onSubmit()" class="login-form">
+      <div class="input-group">
+        <input id="cadastro-nome" type="text" formControlName="nome" placeholder="Nome Completo" class="glass-input" aria-label="Nome Completo" autocomplete="name" spellcheck="false">
+        @if (cadastroForm.get('nome')?.invalid && (cadastroForm.get('nome')?.touched || cadastroForm.get('nome')?.dirty)) {
+          <div class="error-message" role="alert" aria-live="polite">
+            <small>O nome é obrigatório.</small>
+          </div>
+        }
+      </div>
+
+      <div class="input-group">
+        <input id="cadastro-email" type="email" formControlName="email" placeholder="E-mail" class="glass-input" aria-label="E-mail" autocomplete="email" spellcheck="false">
+        @if (cadastroForm.get('email')?.invalid && (cadastroForm.get('email')?.touched || cadastroForm.get('email')?.dirty)) {
+          <div class="error-message" role="alert" aria-live="polite">
+            @if (cadastroForm.get('email')?.hasError('required')) {
+              <small>O e-mail é obrigatório.</small>
+            }
+            @if (cadastroForm.get('email')?.hasError('email')) {
+              <small>Insira um e-mail válido.</small>
+            }
+          </div>
+        }
+      </div>
+
+      <div class="input-group">
+        <input id="cadastro-senha" [type]="showSenha() ? 'text' : 'password'" formControlName="senha" placeholder="Senha" class="glass-input" aria-label="Senha" autocomplete="new-password">
+        <span class="icon-eye" (click)="toggleSenhaVisibility()" role="button" [attr.aria-label]="showSenha() ? 'Ocultar senha' : 'Exibir senha'" tabindex="0" (keydown.enter)="toggleSenhaVisibility()" (keydown.space)="toggleSenhaVisibility()">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#777" stroke-width="2"><path d="M1 12s4-8 11-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+        </span>
+        @if (cadastroForm.get('senha')?.invalid && (cadastroForm.get('senha')?.touched || cadastroForm.get('senha')?.dirty)) {
+          <div class="error-message" role="alert" aria-live="polite">
+            @if (cadastroForm.get('senha')?.hasError('required')) {
+              <small>A senha é obrigatória.</small>
+            }
+            @if (cadastroForm.get('senha')?.hasError('minlength')) {
+              <small>A senha deve ter no mínimo 6 caracteres.</small>
+            }
+          </div>
+        }
+      </div>
+
+      <div class="input-group">
+        <input id="cadastro-confirmar-senha" [type]="showConfirmarSenha() ? 'text' : 'password'" formControlName="confirmarSenha" placeholder="Confirmar Senha" class="glass-input" aria-label="Confirmar Senha" autocomplete="new-password">
+        <span class="icon-eye" (click)="toggleConfirmarSenhaVisibility()" role="button" [attr.aria-label]="showConfirmarSenha() ? 'Ocultar confirmação de senha' : 'Exibir confirmação de senha'" tabindex="0" (keydown.enter)="toggleConfirmarSenhaVisibility()" (keydown.space)="toggleConfirmarSenhaVisibility()">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#777" stroke-width="2"><path d="M1 12s4-8 11-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+        </span>
+        @if (cadastroForm.get('confirmarSenha')?.invalid && (cadastroForm.get('confirmarSenha')?.touched || cadastroForm.get('confirmarSenha')?.dirty)) {
+          <div class="error-message" role="alert" aria-live="polite">
+            @if (cadastroForm.get('confirmarSenha')?.hasError('required')) {
+              <small>A confirmação de senha é obrigatória.</small>
+            }
+            @if (cadastroForm.get('confirmarSenha')?.hasError('minlength')) {
+              <small>A confirmação deve ter no mínimo 6 caracteres.</small>
+            }
+          </div>
+        }
+      </div>
+
+      @if (authService.erro()) {
+        <div class="error-message server-error" role="alert" aria-live="polite" style="margin-top: 10px; color: #ff6b6b; font-size: 0.875rem;">
+          <small>{{ authService.erro() }}</small>
+        </div>
+      }
+
+      <button type="submit" class="btn-continuar" style="margin-top: 15px;" [disabled]="cadastroForm.invalid || authService.loading()">
+        {{ authService.loading() ? 'Cadastrando...' : 'Continuar' }}
+      </button>
+    </form>
+  </div>
+
+  @if (showSuccessModal()) {
+    <div class="modal-backdrop" (click)="fecharModalEirParaLogin()" role="dialog" aria-modal="true" aria-labelledby="modal-sucesso-titulo">
+      <div class="modal-card" (click)="$event.stopPropagation()">
+        <div class="modal-icon">
+          <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#547c6a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+            <polyline points="22 4 12 14.01 9 11.01"></polyline>
+          </svg>
+        </div>
+        <h2 id="modal-sucesso-titulo" class="modal-title">Cadastro Realizado com Sucesso!</h2>
+        <p class="modal-text">Sua conta no Espaço Taíse Yoga foi criada. Faça login para acessar seus agendamentos.</p>
+        <button type="button" class="btn-modal-action" (click)="fecharModalEirParaLogin()">
+          Ir para o Login
+        </button>
+      </div>
+    </div>
+  }
+</div>
