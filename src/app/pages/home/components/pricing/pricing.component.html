@@ -33,7 +33,7 @@
           </ul>
 
           <div class="card-footer">
-            <a href="#contato" class="btn-primary" [class.btn-popular]="isPopularPlan(plan.name)">Assinar {{ plan.name }}</a>
+            <a routerLink="/" fragment="contato" class="btn-primary" [class.btn-popular]="isPopularPlan(plan.name)">Assinar {{ plan.name }}</a>
           </div>
         </div>
       }

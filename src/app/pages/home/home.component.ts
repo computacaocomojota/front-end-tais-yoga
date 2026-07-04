@@ -23,29 +23,10 @@ import { ContactComponent } from './components/contact/contact.component';
     <main>
       <app-hero></app-hero>
       
-      @defer (on viewport) {
-        <app-features></app-features>
-      } @placeholder {
-        <div style="min-height: 480px; display: flex; justify-content: center; align-items: center;"></div>
-      }
-
-      @defer (on viewport) {
-        <app-bio></app-bio>
-      } @placeholder {
-        <div style="min-height: 480px; display: flex; justify-content: center; align-items: center;"></div>
-      }
-
-      @defer (on viewport) {
-        <app-pricing></app-pricing>
-      } @placeholder {
-        <div style="min-height: 600px; display: flex; justify-content: center; align-items: center;"></div>
-      }
-
-      @defer (on viewport) {
-        <app-contact></app-contact>
-      } @placeholder {
-        <div style="min-height: 500px; display: flex; justify-content: center; align-items: center;"></div>
-      }
+      <app-features></app-features>
+      <app-bio></app-bio>
+      <app-pricing></app-pricing>
+      <app-contact></app-contact>
     </main>
   `
 })

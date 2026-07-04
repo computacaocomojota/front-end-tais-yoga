@@ -1,11 +1,12 @@
 import { Component, ChangeDetectionStrategy, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
 import { PricingPlan, FaqItem } from '../../../../models/pricing.model';
 
 @Component({
   selector: 'app-pricing',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, RouterModule],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './pricing.component.html',
   styleUrls: ['./pricing.component.scss']
